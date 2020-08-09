@@ -21,7 +21,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        for (i in 1..10) {
+        for (i in 1..5) {
+            client
+                .create(EarthquakeInterface::class.java).run {
+                    getEarthquakeData(page = i)
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ response ->
+                            LogUtils.log(
+                                //Html.fromHtml(
+                                    response
+                                        ?.string()
+                                        ?.split("<tbody>")
+                                        ?.get(1)
+                                        ?.split("tdpgt tgnlf pdl4")
+                                        ?.get(0)
+                                //).toString()
+                            )
+                        }, { throwable ->
+                            LogUtils.log(throwable)
+                        }, {
+                            LogUtils.log("작업 끝")
+                        })
+                }
+        }
+
+        /*for (i in 1..10) {
             client
                 .create(EarthquakeInterface::class.java).run {
                     getEarthquakeData(i, "20200810")
@@ -35,6 +60,6 @@ class MainActivity : AppCompatActivity() {
                             LogUtils.log("작업 끝")
                         })
                 }
-        }
+        }*/
     }
 }
