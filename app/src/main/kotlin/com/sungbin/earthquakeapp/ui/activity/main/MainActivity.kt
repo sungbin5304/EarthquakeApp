@@ -5,45 +5,30 @@ import android.app.Service
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.sungbin.earthquakeapp.R
-import com.sungbin.earthquakeapp.`interface`.EarthquakeInterface
 import com.sungbin.earthquakeapp.adapter.EarthquakeAdapter
+import com.sungbin.earthquakeapp.adapter.EarthquakePagingAdapter
 import com.sungbin.earthquakeapp.model.EarthquakeData
-import com.sungbin.earthquakeapp.ui.dialog.ProgressDialog
+import com.sungbin.earthquakeapp.paging.EarthquakeDataSource
 import com.sungbin.earthquakeapp.ui.dialog.SearchOptionBottomDialog
-import com.sungbin.earthquakeapp.utils.LogUtils
 import com.sungbin.earthquakeapp.utils.extension.setEndDrawableClickEvent
 import com.sungbin.earthquakeapp.utils.manager.PathManager.END_DATE
 import com.sungbin.earthquakeapp.utils.manager.PathManager.START_DATE
 import com.sungbin.earthquakeapp.utils.manager.PathManager.START_DEPTH
 import com.sungbin.sungbintool.PermissionUtils
-import com.sungbin.sungbintool.StorageUtils
-import com.sungbin.sungbintool.Utils
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.defaultSharedPreferences
-import retrofit2.Retrofit
-import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var client: Retrofit
-
-    private val loadingDialog by lazy {
-        ProgressDialog(this)
-    }
-
-    private val viewModel by viewModels<MainViewModel>()
 
     private val bottomSheetDialog by lazy {
         SearchOptionBottomDialog.instance()
@@ -51,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
     private val imm by lazy {
         applicationContext.getSystemService(Service.INPUT_METHOD_SERVICE) as InputMethodManager
+    }
+
+    private val pagingAdapter by lazy {
+        EarthquakePagingAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,11 +51,6 @@ class MainActivity : AppCompatActivity() {
         et_search.setEndDrawableClickEvent {
             bottomSheetDialog.show(supportFragmentManager, "검색 설정")
         }
-
-        viewModel.items.observe(this, Observer<List<EarthquakeData>> {
-            rv_earthquake.adapter = EarthquakeAdapter(it)
-            //LogUtils.log(it)
-        })
 
         loadEarthquake()
         bottomSheetDialog.setSearchOptionDialogListener {
@@ -81,7 +65,9 @@ class MainActivity : AppCompatActivity() {
             )
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
-                    loadEarthquake()
+                    rv_earthquake.adapter = EarthquakeAdapter(pagingAdapter.currentList?.filter {
+                        it.locate.contains(et_search.text.toString())
+                    } ?: arrayListOf())
                     return@setOnEditorActionListener true
                 }
                 else -> {
@@ -92,8 +78,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadEarthquake() {
-        client
-            .create(EarthquakeInterface::class.java).run {
+        rv_earthquake.adapter = pagingAdapter
+
+        val config = PagedList.Config.Builder()
+            .setPageSize(10)
+            .setEnablePlaceholders(true)
+            .build()
+
+        val liveData = initializedPagedListBuilder(config).build()
+
+        liveData.observe(
+            this@MainActivity,
+            Observer<PagedList<EarthquakeData>> { pagedList ->
+                pagingAdapter.submitList(pagedList)
+            })
+    }
+
+    private fun initializedPagedListBuilder(config: PagedList.Config)
+            : LivePagedListBuilder<Int, EarthquakeData> {
+        val dataSourceFactory = object : DataSource.Factory<Int, EarthquakeData>() {
+            override fun create(): DataSource<Int, EarthquakeData> {
                 var startDepth: Int
                 var endDate: String
                 var startDate: String
@@ -109,44 +113,14 @@ class MainActivity : AppCompatActivity() {
                     startDate = getString(START_DATE, "2020-01-01").toString()
                 }
 
-                LogUtils.log(et_search.text, URLEncoder.encode(et_search.text.toString(), "EUC-KR"))
-
-                loadingDialog.show()
-                getEarthquakeData(
-                    URLEncoder.encode(et_search.text.toString(), "EUC-KR"),
-                    1,
-                    if (startDepth > 0) "$startDepth.0" else "999.0",
-                    startDate,
-                    endDate
+                return EarthquakeDataSource(
+                    startDepth,
+                    endDate,
+                    startDate
                 )
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        val html = response.string()
-
-                        StorageUtils.save("html.txt", html)
-                        Utils.copy(applicationContext, html.split("<tbody>")[1])
-
-                        /*//Utils.copy(applicationContext, response?.string()!!)
-                        viewModel.items.value =
-                            ParsingUtils.get(
-                                response
-                                    ?.string()
-                                    ?.split("<tbody>")
-                                    ?.get(1)
-                                    *//*?.split("tdpgt tgnlf pdl4")
-                                    ?.get(0)*//*
-                                    .toString()
-                            )
-                        viewModel.items.value.let {
-                            LogUtils.log("호출댐", it?.size)
-                        }*/
-                    }, { throwable ->
-                        loadingDialog.setError(throwable)
-                        throwable.printStackTrace()
-                    }, {
-                        loadingDialog.close()
-                    })
             }
+        }
+        return LivePagedListBuilder<Int, EarthquakeData>(dataSourceFactory, config)
     }
+
 }

@@ -10,6 +10,7 @@ import com.sungbin.earthquakeapp.module.GlideApp
  */
 
 data class EarthquakeData(
+    val page: Int,
     val time: String,
     val intensity: String,
     val depth: String,
