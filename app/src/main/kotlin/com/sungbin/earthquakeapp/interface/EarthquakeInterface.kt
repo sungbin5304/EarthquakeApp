@@ -13,8 +13,9 @@ import java.util.*
  */
 
 interface EarthquakeInterface {
-    @GET("weather/earthquake_volcano/domesticlist.jsp?endSize=999.0&startLat=999.0&endLat=999.0&startLon=999.0&endLon=999.0&lat=999.0&lon=999.0&dist=999.0&keyword=")
+    @GET("weather/earthquake_volcano/domesticlist.jsp?endSize=999.0&startLat=999.0&endLat=999.0&startLon=999.0&endLon=999.0&lat=999.0&lon=999.0&dist=999.0&x=0&y=0&schOption=T")
     fun getEarthquakeData(
+        @Query("keyword") search: String,
         @Query("pNo") page: Int,
         @Query("startSize") type: String = "999.0",
         @Query("startTm") startDate: String = "2020-01-01",
