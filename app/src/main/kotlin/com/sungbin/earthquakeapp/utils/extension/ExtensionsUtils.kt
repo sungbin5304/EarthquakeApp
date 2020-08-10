@@ -20,7 +20,7 @@ fun toast(message: Any?, duration: Int = ToastUtils.SHORT, type: Int = ToastUtil
     ToastUtils.show(EarthquakeApp.context, message.toString(), duration, type)
 }
 
-fun View.hide(isGone: Boolean = false){
+fun View.hide(isGone: Boolean = false) {
     this.visibility = if (isGone) View.GONE else View.INVISIBLE
 }
 
@@ -35,6 +35,23 @@ operator fun TextView.plusAssign(text: String) {
 fun TextView.clear() {
     this.text = ""
 }
+
+@SuppressLint("ClickableViewAccessibility")
+fun EditText.setEndDrawableClickEvent(action: (View) -> Unit){
+    this.setOnTouchListener(View.OnTouchListener { view, event ->
+        if (event.action == MotionEvent.ACTION_UP) {
+            if (event.rawX >= this.right - this.compoundDrawables[2].bounds.width()
+            ) {
+                action(view)
+                return@OnTouchListener true
+            }
+        }
+        false
+    })
+}
+
+fun String.parse(startValue: String, endValue: String = "</$startValue>", index: Int) =
+    this.split(if (startValue.contains("<")) startValue else "<$startValue>")[index].split(endValue)[0]
 
 operator fun View.get(@IdRes id: Int) = this.findViewById<View>(id)!!
 

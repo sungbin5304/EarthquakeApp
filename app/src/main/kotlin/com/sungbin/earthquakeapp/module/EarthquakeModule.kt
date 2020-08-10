@@ -21,7 +21,6 @@ class EarthquakeModule {
     @Singleton
     @Provides
     fun instance() = Retrofit.Builder()
-        //.addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .baseUrl(ApiManager.BASE_URI)
         .build()

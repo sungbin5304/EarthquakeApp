@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">EarthquakeApp</string>
+    <string name="search_earthquake">지진 검색</string>
+    <string name="copyright">copyright ⓒ 2020 SungBin Ji</string>
+    <string name="loading">데이터 불러오는중...</string>
 </resources>
