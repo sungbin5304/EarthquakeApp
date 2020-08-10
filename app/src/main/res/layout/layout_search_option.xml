@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_default"
+    android:orientation="vertical"
+    android:background="@drawable/bg_round_top_layout"
+    android:backgroundTint="@color/colorWhite"
+    tools:ignore="MissingConstraints,RtlSymmetry" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_depth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tv_start_depth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_start_depth"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:hint="@string/num_zero"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:singleLine="true"
+            android:inputType="number"
+            android:id="@+id/et_start_depth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:importantForAutofill="no" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tv_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_start_date"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:hint="@string/yyyy_mm_dd"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:inputType="date"
+            android:id="@+id/et_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:importantForAutofill="no"
+            tools:ignore="TextFields" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_end_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tv_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_end_date"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:hint="@string/yyyy_mm_dd"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:inputType="date"
+            android:id="@+id/et_end_date"
+            android:maxLength="10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:importantForAutofill="no"
+            tools:ignore="TextFields" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

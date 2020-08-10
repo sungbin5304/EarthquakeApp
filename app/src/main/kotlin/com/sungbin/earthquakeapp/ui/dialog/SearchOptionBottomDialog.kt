@@ -1,54 +1,67 @@
 package com.sungbin.earthquakeapp.ui.dialog
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import androidx.core.content.edit
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.sungbin.earthquakeapp.R
+import com.sungbin.earthquakeapp.utils.extension.get
+import com.sungbin.earthquakeapp.utils.extension.toEditable
+import com.sungbin.earthquakeapp.utils.manager.PathManager.END_DATE
+import com.sungbin.earthquakeapp.utils.manager.PathManager.START_DATE
+import com.sungbin.earthquakeapp.utils.manager.PathManager.START_DEPTH
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
+import java.text.SimpleDateFormat
+import java.util.*
 
-class SearchOptionBottomDialog : BottomSheetDialogFragment() /*{
+class SearchOptionBottomDialog : BottomSheetDialogFragment() {
 
-    private lateinit var etSortType: TextInputEditText
-    private lateinit var etSearchType: TextInputEditText
-    private lateinit var etPerPageCount: TextInputEditText
+    private lateinit var etStartDepth: EditText
+    private lateinit var etStartData: EditText
+    private lateinit var etEndDate: EditText
 
+    interface OnSearchOptionDialogListener {
+        fun onClosed()
+    }
+
+    private var  listener: OnSearchOptionDialogListener? = null
+    fun setOnDatabaseRemovedListener(listenerOn: OnSearchOptionDialogListener?) {
+        this.listener = listenerOn
+    }
+
+    fun setSearchOptionDialogListener(listener: () -> Unit) {
+        this.listener = object : OnSearchOptionDialogListener {
+            override fun onClosed() {
+                listener()
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.layout_search_option_dialog, container, false)
-        etSortType = layout[R.id.tiet_sort] as TextInputEditText
-        etSearchType = layout[R.id.tiet_type] as TextInputEditText
-        etPerPageCount = layout[R.id.tiet_per_page] as TextInputEditText
-
-        etSortType.isFocusable = false
-        etSearchType.isFocusable = false
-
-        etSortType.setEndDrawableClickEvent {
-            val menu = PopupMenu(context, it)
-            menu.menu.add(0, 0, 0, TITLE_SORT)
-            menu.menu.add(0, 1, 0, POPULARITY_SORT)
-            menu.setOnMenuItemClickListener { item ->
-                etSortType.text = item.title.toString().toEditable()
-                true
-            }
-            menu.show()
-        }
-
-        etSearchType.setEndDrawableClickEvent {
-            val menu = PopupMenu(context, it)
-            menu.menu.add(0, 0, 0, SONG_SEARCH)
-            menu.menu.add(0, 1, 0, LYRIC_SEARCH)
-            menu.menu.add(0, 2, 0, ARTIST_SEARCH)
-            menu.menu.add(0, 3, 0, ALBUM_SEARCH)
-            menu.setOnMenuItemClickListener { item ->
-                etSearchType.text = item.title.toString().toEditable()
-                true
-            }
-            menu.show()
-        }
+        val layout = inflater.inflate(R.layout.layout_search_option, container, false)
+        etStartDepth = layout[R.id.et_start_depth] as EditText
+        etStartData = layout[R.id.et_start_date] as EditText
+        etEndDate = layout[R.id.et_end_date] as EditText
 
         defaultSharedPreferences.run {
-            etSortType.text = getString(SEARCH_SORT_TYPE, TITLE_SORT).toEditable()
-            etSearchType.text = getString(SEARCH_TYPE, SONG_SEARCH).toEditable()
-            etPerPageCount.text = getString(PER_PAGE, "10").toEditable()
+            etStartDepth.text = "${getInt(START_DEPTH, 0)}.0".toEditable()
+            etStartData.text = getString(START_DATE, "2020-01-01").toEditable()
+            etEndDate.text = getString(
+                END_DATE, SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.KOREA
+                ).format(Date())
+            ).toEditable()
         }
 
         return layout
@@ -58,10 +71,12 @@ class SearchOptionBottomDialog : BottomSheetDialogFragment() /*{
         super.onDismiss(dialog)
 
         defaultSharedPreferences.edit {
-            putString(SEARCH_TYPE, etSearchType.text.toString())
-            putString(SEARCH_SORT_TYPE, etSortType.text.toString())
-            putString(PER_PAGE, etPerPageCount.text.toString())
+            putString(END_DATE, etEndDate.text.toString())
+            putString(START_DATE, etStartData.text.toString())
+            putInt(START_DEPTH, etStartDepth.text.toString().toInt())
         }
+
+        if(listener != null) listener!!.onClosed()
     }
 
     companion object {
@@ -71,4 +86,4 @@ class SearchOptionBottomDialog : BottomSheetDialogFragment() /*{
 
         fun instance() = instance
     }
-}*/
+}

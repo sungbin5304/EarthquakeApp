@@ -18,8 +18,8 @@
         app:cardCornerRadius="@dimen/margin_default"
         app:contentPaddingTop="@dimen/margin_default"
         app:contentPaddingBottom="@dimen/margin_default"
-        app:contentPaddingLeft="@dimen/margin_twice"
-        app:contentPaddingRight="@dimen/margin_twice">
+        app:contentPaddingLeft="@dimen/margin_default"
+        app:contentPaddingRight="@dimen/margin_default">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_time"
-                tools:text="북한 함경북도 길주\n북북서쪽 43km 지역" />
+                tools:text="북한 함경북도 길주\n북서쪽 43km 지역" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

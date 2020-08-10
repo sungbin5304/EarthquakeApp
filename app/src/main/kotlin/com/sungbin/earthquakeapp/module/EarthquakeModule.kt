@@ -1,6 +1,6 @@
 package com.sungbin.earthquakeapp.module
 
-import com.sungbin.earthquakeapp.utils.manager.ApiManager
+import com.sungbin.earthquakeapp.utils.manager.PathManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +22,6 @@ class EarthquakeModule {
     @Provides
     fun instance() = Retrofit.Builder()
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .baseUrl(ApiManager.BASE_URI)
+        .baseUrl(PathManager.BASE_URI)
         .build()
 }
