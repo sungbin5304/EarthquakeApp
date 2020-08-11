@@ -8,4 +8,11 @@
     <string name="set_end_date">종료 날짜 설정</string>
     <string name="set_start_depth">시작 규모 설정 (0 ~ 9)</string>
     <string name="num_zero">0</string>
+    <string name="earthquake_time">발생 시각</string>
+    <string name="intensity">규모</string>
+    <string name="depth">깊이</string>
+    <string name="max_magnitude">최대 진도</string>
+    <string name="latitude">위도</string>
+    <string name="longitude">경도</string>
+    <string name="locate">위치</string>
 </resources>

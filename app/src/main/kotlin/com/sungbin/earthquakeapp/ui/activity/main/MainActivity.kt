@@ -15,7 +15,9 @@ import com.sungbin.earthquakeapp.adapter.EarthquakeAdapter
 import com.sungbin.earthquakeapp.adapter.EarthquakePagingAdapter
 import com.sungbin.earthquakeapp.model.EarthquakeData
 import com.sungbin.earthquakeapp.paging.EarthquakeDataSource
+import com.sungbin.earthquakeapp.ui.dialog.EarthquakeDetailBottomDialog
 import com.sungbin.earthquakeapp.ui.dialog.SearchOptionBottomDialog
+import com.sungbin.earthquakeapp.utils.LogUtils
 import com.sungbin.earthquakeapp.utils.extension.setEndDrawableClickEvent
 import com.sungbin.earthquakeapp.utils.manager.PathManager.END_DATE
 import com.sungbin.earthquakeapp.utils.manager.PathManager.START_DATE
@@ -52,6 +54,11 @@ class MainActivity : AppCompatActivity() {
             bottomSheetDialog.show(supportFragmentManager, "검색 설정")
         }
 
+        pagingAdapter.setOnItemClickListener {
+            LogUtils.log("-".repeat(50), it.mapImage, "-".repeat(50))
+            EarthquakeDetailBottomDialog(it).show(supportFragmentManager, "")
+        }
+
         loadEarthquake()
         bottomSheetDialog.setSearchOptionDialogListener {
             loadEarthquake()
@@ -65,9 +72,12 @@ class MainActivity : AppCompatActivity() {
             )
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
-                    rv_earthquake.adapter = EarthquakeAdapter(pagingAdapter.currentList?.filter {
+                    val searchedArray = pagingAdapter.currentList?.filter {
                         it.locate.contains(et_search.text.toString())
-                    } ?: arrayListOf())
+                    } ?: arrayListOf()
+                    val searchedSet = hashSetOf<EarthquakeData>()
+                    searchedSet.addAll(searchedArray)
+                    rv_earthquake.adapter = EarthquakeAdapter(searchedSet.toList())
                     return@setOnEditorActionListener true
                 }
                 else -> {

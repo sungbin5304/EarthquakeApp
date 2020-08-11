@@ -21,11 +21,28 @@ import com.sungbin.earthquakeapp.paging.EarthquakeDiffUtilCallback
 class EarthquakePagingAdapter : PagedListAdapter<EarthquakeData, EarthquakePagingAdapter.ViewHolder>(
     EarthquakeDiffUtilCallback()
 ) {
+    interface OnEarthquakeListener {
+        fun onItemClicked(item: EarthquakeData)
+    }
+
+    private var listener: OnEarthquakeListener? = null
+    fun setOnItemClickListener(action: (EarthquakeData) -> Unit) {
+        listener = object : OnEarthquakeListener {
+            override fun onItemClicked(item: EarthquakeData) {
+                action(item)
+            }
+        }
+    }
 
     class ViewHolder(private val itemBinding: LayoutEarthquakePanelBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bindViewHolder(item: EarthquakeData) {
             itemBinding.item = item
+        }
+        fun bindOnClickListener(action: () -> Unit) {
+            itemBinding.cvPanel.setOnClickListener {
+                action()
+            }
         }
     }
 
@@ -40,6 +57,10 @@ class EarthquakePagingAdapter : PagedListAdapter<EarthquakeData, EarthquakePagin
     override fun onBindViewHolder(@NonNull viewholder: ViewHolder, position: Int) {
         getItem(position)?.let {
             viewholder.bindViewHolder(it)
+
+            viewholder.bindOnClickListener {
+                listener?.onItemClicked(it)
+            }
         }
     }
 

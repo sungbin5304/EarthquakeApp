@@ -50,8 +50,8 @@ fun EditText.setEndDrawableClickEvent(action: (View) -> Unit){
     })
 }
 
-fun String.parse(startValue: String, endValue: String = "</$startValue>", index: Int) =
-    this.split(if (startValue.contains("<")) startValue else "<$startValue>")[index].split(endValue)[0]
+fun String.parse(startValue: String, endValue: String = "</$startValue>", index: Int, inputAuto: Boolean = true) =
+    this.split(if (inputAuto) {if (startValue.contains("<")) startValue else "<$startValue>"} else startValue)[index].split(endValue)[0]
 
 operator fun View.get(@IdRes id: Int) = this.findViewById<View>(id)!!
 

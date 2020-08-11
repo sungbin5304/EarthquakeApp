@@ -1,57 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.activity.main.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_searchbar"
+    <data>
+        <variable
+            name="item"
+            type="com.sungbin.earthquakeapp.model.EarthquakeData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingBottom="@dimen/margin_twice_and_half"
+        android:id="@+id/cl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default"
-        app:cardCornerRadius="@dimen/margin_half"
-        app:cardElevation="@dimen/margin_default"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context=".ui.activity.main.MainActivity">
 
-        <EditText
-            android:maxLines="1"
-            android:singleLine="true"
-            android:id="@+id/et_search"
-            android:layout_width="match_parent"
+        <com.sungbin.sungbintool.ui.TagableRoundImageView
+            android:id="@+id/triv_map"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="@dimen/margin_twice_and_half"
+            app:imageUrl="@{item.mapImage}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:triv_imageRadius="@dimen/margin_half"
+            tools:src="@color/colorGreen" />
+
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:hint="@string/search_earthquake"
-            android:importantForAutofill="no"
-            android:drawableEnd="@drawable/ic_baseline_settings_24"
-            android:backgroundTint="@color/colorGray"
-            android:inputType="text"
-            android:padding="@dimen/margin_default" />
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_twice_and_half"
+            android:text="@string/earthquake_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/triv_map" />
 
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tv_show_time"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{item.time}"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_twice_and_half"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/triv_map"
+            tools:text="2020/02/02 17:17:17" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_earthquake"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:overScrollMode="never"
-        android:padding="@dimen/margin_default"
-        tools:listitem="@layout/layout_earthquake_panel"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/cv_searchbar" />
+        <!---->
 
-    <TextView
-        android:id="@+id/tv_copyright"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/copyright"
-        android:layout_marginBottom="@dimen/margin_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_intensity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/intensity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_show_intensity"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{item.intensity}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_time"
+            tools:text="3.7" />
+
+        <!---->
+
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_depth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/depth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_intensity" />
+
+        <TextView
+            android:id="@+id/tv_show_depth"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{item.depth}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_intensity"
+            tools:text="7km" />
+
+        <!---->
+
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_magnitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/max_magnitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_depth" />
+
+        <TextView
+            android:id="@+id/tv_show_magnitude"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{item.magnitude}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_depth"
+            tools:text="5" />
+
+        <!---->
+
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_latitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/latitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_magnitude" />
+
+        <TextView
+            android:id="@+id/tv_show_latitude"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{item.latitude}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_magnitude"
+            tools:text="127.0" />
+
+        <!---->
+
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_longitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/longitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_latitude" />
+
+        <TextView
+            android:id="@+id/tv_show_longitude"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{item.longitude}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_latitude"
+            tools:text="163.7" />
+
+        <!---->
+
+        <TextView
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tv_locate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:text="@string/locate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_longitude" />
+
+        <TextView
+            android:id="@+id/tv_show_locate"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:text="@{item.locate}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_twice"
+            android:layout_marginTop="@dimen/margin_default"
+            android:gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_show_longitude"
+            tools:text="충청남도 서산시 중앙하이츠" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,6 +12,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_panel"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/colorPrimary"

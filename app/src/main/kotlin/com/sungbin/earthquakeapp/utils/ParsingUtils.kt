@@ -24,7 +24,7 @@ object ParsingUtils {
                 val second = toString().split(first)[1]
                 first + "\n" + second
             }
-            val mapImage = data.parse("td", index = 9)
+            val mapImage = "http://www.weather.go.kr${data.parse("fn_popup_alone('", "'", 1, false)}"
             val earthquakeData = EarthquakeData(
                 page,
                 time,
