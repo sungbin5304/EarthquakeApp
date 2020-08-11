@@ -14,7 +14,7 @@ object ParsingUtils {
             val data = totalData.split("<tr>")[i].split("</tr>")[0]
             val time = data.parse("td", index = 2)
             val intensity = data.parse("td", index = 3)
-            val depth = data.parse("td", index = 4)
+            val depth = "${data.parse("td", index = 4)} km"
             val magnitude = data.parse("td", index = 5)
             val latitude = data.parse("td", index = 6)
             val longitude = data.parse("td", index = 7)
