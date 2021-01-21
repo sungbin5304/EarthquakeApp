@@ -76,7 +76,7 @@ class SearchOptionBottomDialog : BottomSheetDialogFragment() {
             putInt(START_DEPTH, etStartDepth.text.toString().toInt())
         }
 
-        if(listener != null) listener!!.onClosed()
+        listener?.onClosed()
     }
 
     companion object {
