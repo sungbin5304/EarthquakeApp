@@ -101,36 +101,37 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity,
             Observer<PagedList<EarthquakeData>> { pagedList ->
                 pagingAdapter.submitList(pagedList)
-            })
-    }
-
-    private fun initializedPagedListBuilder(config: PagedList.Config)
-            : LivePagedListBuilder<Int, EarthquakeData> {
-        val dataSourceFactory = object : DataSource.Factory<Int, EarthquakeData>() {
-            override fun create(): DataSource<Int, EarthquakeData> {
-                var startDepth: Int
-                var endDate: String
-                var startDate: String
-
-                defaultSharedPreferences.run {
-                    startDepth = getInt(START_DEPTH, 999)
-                    endDate = getString(
-                        END_DATE, SimpleDateFormat(
-                            "yyyy-MM-dd",
-                            Locale.KOREA
-                        ).format(Date())
-                    ).toString()
-                    startDate = getString(START_DATE, "2020-01-01").toString()
-                }
-
-                return EarthquakeDataSource(
-                    startDepth,
-                    endDate,
-                    startDate
-                )
             }
-        }
-        return LivePagedListBuilder<Int, EarthquakeData>(dataSourceFactory, config)
+        )
     }
 
+    private fun initializedPagedListBuilder(config: PagedList.Config):
+        LivePagedListBuilder<Int, EarthquakeData> {
+            val dataSourceFactory = object : DataSource.Factory<Int, EarthquakeData>() {
+                override fun create(): DataSource<Int, EarthquakeData> {
+                    var startDepth: Int
+                    var endDate: String
+                    var startDate: String
+
+                    defaultSharedPreferences.run {
+                        startDepth = getInt(START_DEPTH, 999)
+                        endDate = getString(
+                            END_DATE,
+                            SimpleDateFormat(
+                                "yyyy-MM-dd",
+                                Locale.KOREA
+                            ).format(Date())
+                        ).toString()
+                        startDate = getString(START_DATE, "2020-01-01").toString()
+                    }
+
+                    return EarthquakeDataSource(
+                        startDepth,
+                        endDate,
+                        startDate
+                    )
+                }
+            }
+            return LivePagedListBuilder<Int, EarthquakeData>(dataSourceFactory, config)
+        }
 }

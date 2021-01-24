@@ -11,7 +11,6 @@ import com.sungbin.earthquakeapp.EarthquakeApp
 import com.sungbin.sungbintool.StringUtils
 import com.sungbin.sungbintool.ToastUtils
 
-
 /**
  * Created by SungBin on 2020-07-28.
  */
@@ -37,21 +36,23 @@ fun TextView.clear() {
 }
 
 @SuppressLint("ClickableViewAccessibility")
-fun EditText.setEndDrawableClickEvent(action: (View) -> Unit){
-    this.setOnTouchListener(View.OnTouchListener { view, event ->
-        if (event.action == MotionEvent.ACTION_UP) {
-            if (event.rawX >= this.right - this.compoundDrawables[2].bounds.width()
-            ) {
-                action(view)
-                return@OnTouchListener true
+fun EditText.setEndDrawableClickEvent(action: (View) -> Unit) {
+    this.setOnTouchListener(
+        View.OnTouchListener { view, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= this.right - this.compoundDrawables[2].bounds.width()
+                ) {
+                    action(view)
+                    return@OnTouchListener true
+                }
             }
+            false
         }
-        false
-    })
+    )
 }
 
 fun String.parse(startValue: String, endValue: String = "</$startValue>", index: Int, inputAuto: Boolean = true) =
-    this.split(if (inputAuto) {if (startValue.contains("<")) startValue else "<$startValue>"} else startValue)[index].split(endValue)[0]
+    this.split(if (inputAuto) { if (startValue.contains("<")) startValue else "<$startValue>" } else startValue)[index].split(endValue)[0]
 
 operator fun View.get(@IdRes id: Int) = this.findViewById<View>(id)!!
 

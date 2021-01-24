@@ -5,7 +5,7 @@ import com.sungbin.earthquakeapp.utils.extension.parse
 
 object ParsingUtils {
 
-    fun get(page: Int , htmlData: String): ArrayList<EarthquakeData> {
+    fun get(page: Int, htmlData: String): ArrayList<EarthquakeData> {
         val totalData = htmlData.run {
             substring(0..lastIndexOf("<tr>"))
         }
@@ -40,5 +40,4 @@ object ParsingUtils {
         }
         return earthquakeTotalData
     }
-
 }

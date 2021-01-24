@@ -41,23 +41,27 @@ class EarthquakeDataSource constructor(
                 )
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        callback(
-                            ParsingUtils.get(
-                                page,
-                                response
-                                    ?.string()
-                                    ?.split("<tbody>")
-                                    ?.get(1)
-                                    ?.split("tdpgt tgnlf pdl4")
-                                    ?.get(0)
-                                    .toString()
+                    .subscribe(
+                        { response ->
+                            callback(
+                                ParsingUtils.get(
+                                    page,
+                                    response
+                                        ?.string()
+                                        ?.split("<tbody>")
+                                        ?.get(1)
+                                        ?.split("tdpgt tgnlf pdl4")
+                                        ?.get(0)
+                                        .toString()
+                                )
                             )
-                        )
-                    }, { throwable ->
-                        LogUtils.log(throwable)
-                    }, {
-                    })
+                        },
+                        { throwable ->
+                            LogUtils.log(throwable)
+                        },
+                        {
+                        }
+                    )
             }
     }
 
